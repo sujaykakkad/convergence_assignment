@@ -1,0 +1,17 @@
+version: '3.4'
+
+services:
+  usersconvergenceassignmentdev:
+    image: usersconvergenceassignmentdev
+    restart: always
+    build:
+      context: .
+      dockerfile: ./Dockerfile.dev
+    environment:
+      NODE_ENV: development
+    ports:
+      - 3000:3000
+      - 9229:9229
+    command: ["node", "--inspect=0.0.0.0:9229", "index.js"]
+    volumes:
+      - ./:/usr/src/app

@@ -12,6 +12,6 @@ services:
     ports:
       - 3000:3000
       - 9229:9229
-    command: ["nodemon", "--inspect=0.0.0.0:9229", "src/index.js"]
+    command: sh -c "npm i;nodemon --inspect=0.0.0.0:9229 src/index.js"
     volumes:
-      - ./:/usr/src/app
+      - ./:/usr/app

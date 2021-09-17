@@ -3,6 +3,7 @@ const {
   login,
   generateReportHtmlToPdf,
   getPublicResources,
+  getAdminResources,
 } = require('../services');
 
 module.exports = async (router) => {
@@ -49,7 +50,7 @@ module.exports = async (router) => {
 
   router.post('/login', login);
   router.get('/resources/public/all', getPublicResources);
-  router.get('/resources/only-admin/all', { onRequest: [authorizationService] }, getPublicResources);
+  router.get('/resources/only-admin/all', { onRequest: [authorizationService] }, getAdminResources);
   // router.get('/html-page', getHtmlPage);
 
   router.post(

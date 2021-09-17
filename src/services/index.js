@@ -41,7 +41,7 @@ exports.login = async (req, res) => {
 exports.logout = async (req) => {
   const { token: tokenObj } = req;
   const db = dbStore.mongoConn.db(mongo.db);
-  await db.collection(collectionNames.tokenBlackList).insert({
+  await db.collection(collectionNames.tokenBlackList).insertOne({
     token_id: tokenObj.jti,
     issued_date: moment.unix(tokenObj.iat).toDate(),
   });

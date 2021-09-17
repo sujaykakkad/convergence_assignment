@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const { token, mongo, collectionNames } = require('../config');
 const dbStore = require('../lib/db');
 
-module.exports = async (req, res, next) => {
+module.exports = async (req, res) => {
   let errorStatus = 401;
   let errorMessage = 'Authorization Failed';
   let isAuthorized = false;
@@ -33,7 +33,5 @@ module.exports = async (req, res, next) => {
     res.send({
       error: { message: errorMessage },
     });
-  } else {
-    next();
   }
 };

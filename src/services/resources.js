@@ -1,4 +1,5 @@
 /* eslint-disable no-underscore-dangle */
+// eslint-disable-next-line import/no-extraneous-dependencies
 const { ObjectId } = require('bson');
 const dbStore = require('../lib/db');
 const { mongo, collectionNames } = require('../config');

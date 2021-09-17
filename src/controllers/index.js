@@ -1,7 +1,8 @@
-const authenticationService = require('../services/authentication');
+const authorizationService = require('../services/authorization');
 const {
+  login,
   generateReportHtmlToPdf,
-  getHtmlPage,
+  getPublicResources,
 } = require('../services');
 
 module.exports = async (router) => {
@@ -46,13 +47,16 @@ module.exports = async (router) => {
     },
   };
 
-  router.get('/html-page', getHtmlPage);
+  router.post('/login', login);
+  router.get('/resources/public/all', getPublicResources);
+  router.get('/resources/only-admin/all', { onRequest: [authorizationService] }, getPublicResources);
+  // router.get('/html-page', getHtmlPage);
 
   router.post(
     '/generate-report-html-to-pdf',
     {
       schema: initiateReportPdfDownloadSchema,
-      onRequest: [authenticationService],
+      onRequest: [authorizationService],
     },
     generateReportHtmlToPdf,
   );

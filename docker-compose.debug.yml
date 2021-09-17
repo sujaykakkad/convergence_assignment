@@ -1,17 +1,29 @@
 version: '3.4'
 
 services:
-  usersconvergenceassignmentdev:
-    image: usersconvergenceassignmentdev
-    restart: always
-    build:
-      context: .
-      dockerfile: ./Dockerfile.dev
+  # convergenceassignmentdev:
+  #   image: convergenceassignmentdev
+  #   restart: always
+  #   build:
+  #     context: .
+  #     dockerfile: ./Dockerfile.dev
+  #   environment:
+  #     NODE_ENV: development
+  #   depends_on:
+  #     - mongo
+  #   ports:
+  #     - 3000:3000
+  #     - 9229:9229
+  #   command: sh -c "npm i;nodemon --ignore 'logs/*' --inspect=0.0.0.0:9229 src/index.js"
+  #   volumes:
+  #     - ./:/usr/app
+  mongo:
+    container_name: convergence-mongo-dev
     environment:
-      NODE_ENV: development
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=toor
+    image: "mongo:latest"
     ports:
-      - 3000:3000
-      - 9229:9229
-    command: sh -c "npm i;nodemon --ignore 'logs/*' --inspect=0.0.0.0:9229 src/index.js"
-    volumes:
-      - ./:/usr/app
+      - "27017:27017"
+    # volumes:
+    #   - ./data/db:/data/db

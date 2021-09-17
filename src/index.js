@@ -14,14 +14,12 @@ fastify.setErrorHandler(async (err, _, res) => {
   if (err.validation) {
     res.status(400);
     responseBody = {
-      data: {},
-      errors: [{ message: err.message }],
+      error: { message: err.message },
     };
   } else {
     res.status(500);
     responseBody = {
-      data: {},
-      errors: [{ message: 'Some Internal Error Occurred' }],
+      error: { message: 'Some Internal Error Occurred' },
     };
   }
   res.send(responseBody);

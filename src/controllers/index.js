@@ -1,6 +1,7 @@
 const authorizationService = require('../services/authorization');
 const {
   login,
+  logout,
   generateReportHtmlToPdf,
   getPublicResources,
   getAdminResources,
@@ -48,8 +49,23 @@ module.exports = async (router) => {
     },
   };
 
-  router.post('/login', login);
+  const loginSchema = {
+    body: {
+      type: 'object',
+      required: [
+        'email',
+        'password',
+      ],
+      properties: {
+        email: { type: 'string', minLength: 1 },
+        password: { type: 'string', minLength: 8 },
+      },
+    },
+  };
+
+  router.post('/login', { schema: loginSchema }, login);
   router.get('/resources/public/all', getPublicResources);
+  router.post('/logout', { onRequest: [authorizationService] }, logout);
   router.get('/resources/only-admin/all', { onRequest: [authorizationService] }, getAdminResources);
   // router.get('/html-page', getHtmlPage);
 

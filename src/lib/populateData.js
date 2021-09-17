@@ -1,9 +1,18 @@
-const { mongo } = require('../config');
+const { mongo, token } = require('../config');
 
 module.exports = async (mongoConn) => {
   const db = mongoConn.db(mongo.db);
   const resourcesCollection = db.collection('resources');
   const usersCollection = db.collection('users');
+  const collections = (await db.listCollections().toArray());
+  const tokenBlacklistName = 'token_blacklist';
+  if (!collections.find((coll) => coll.name === tokenBlacklistName)) {
+    await db.createCollection(tokenBlacklistName);
+    await db.collection(tokenBlacklistName)
+      .createIndex({ issued_date: 1 }, { expireAfterSeconds: token.expiry });
+    await db.collection(tokenBlacklistName)
+      .createIndex({ token_id: 1 }, { unique: true });
+  }
   await Promise.all([resourcesCollection.remove(), usersCollection.remove()]);
   await Promise.all([
     usersCollection.insertMany([

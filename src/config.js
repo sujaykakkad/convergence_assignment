@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+const tokenExpiry = parseInt(process.env.JWT_TOKEN_EXPIRY, 10) || 86400;
 module.exports = {
   appInfo: {
     prefix: process.env.PREFIX || 'convergence',
@@ -13,6 +14,7 @@ module.exports = {
   },
   token: {
     secret: process.env.JWT_TOKEN_SECRET,
-    expiry: process.env.JWT_TOKEN_EXPIRY || '1d',
+    expiry: tokenExpiry,
+    expiryInMillis: tokenExpiry * 1000,
   },
 };

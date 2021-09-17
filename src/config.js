@@ -17,4 +17,9 @@ module.exports = {
     expiry: tokenExpiry,
     expiryInMillis: tokenExpiry * 1000,
   },
+  collectionNames: {
+    tokenBlackList: 'token_blacklist',
+    users: 'users',
+    resources: 'resources',
+  },
 };

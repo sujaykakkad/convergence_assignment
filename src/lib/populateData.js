@@ -1,11 +1,11 @@
-const { mongo, token } = require('../config');
+const { mongo, token, collectionNames } = require('../config');
 
 module.exports = async (mongoConn) => {
   const db = mongoConn.db(mongo.db);
   const resourcesCollection = db.collection('resources');
   const usersCollection = db.collection('users');
   const collections = (await db.listCollections().toArray());
-  const tokenBlacklistName = 'token_blacklist';
+  const tokenBlacklistName = collectionNames.tokenBlackList;
   if (!collections.find((coll) => coll.name === tokenBlacklistName)) {
     await db.createCollection(tokenBlacklistName);
     await db.collection(tokenBlacklistName)

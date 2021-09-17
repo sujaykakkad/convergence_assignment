@@ -2,14 +2,14 @@
 const jwt = require('jsonwebtoken');
 const { v4: uuidv4 } = require('uuid');
 const moment = require('moment');
-const { mongo, token } = require('../config');
+const { mongo, token, collectionNames } = require('../config');
 const dbStore = require('../lib/db');
 const { bcryptCompareAsync } = require('../lib/util');
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
   const db = dbStore.mongoConn.db(mongo.db);
-  const user = await db.collection('users').findOne({ email });
+  const user = await db.collection(collectionNames.users).findOne({ email });
   const errorResponse = {
     error: { message: 'Invalid Email or Password' },
   };
@@ -41,7 +41,7 @@ exports.login = async (req, res) => {
 exports.logout = async (req) => {
   const { token: tokenObj } = req;
   const db = dbStore.mongoConn.db(mongo.db);
-  await db.collection('token_blacklist').insert({
+  await db.collection(collectionNames.tokenBlackList).insert({
     token_id: tokenObj.jti,
     issued_date: moment.unix(tokenObj.iat).toDate(),
   });
@@ -50,47 +50,4 @@ exports.logout = async (req) => {
       message: 'Logout Successful',
     },
   };
-};
-
-exports.getPublicResources = async (req, res) => {
-  const db = dbStore.mongoConn.db(mongo.db);
-  const cursor = db.collection('resources').find({ type: 'public' });
-  const resources = await cursor.toArray();
-  if (resources && resources.length) {
-    return {
-      data: resources,
-    };
-  }
-  return {
-    data: [],
-  };
-};
-
-exports.getAdminResources = async (req, res) => {
-  const db = dbStore.mongoConn.db(mongo.db);
-  const cursor = db.collection('resources').find({ type: { $in: ['admin', 'private'] } });
-  const resources = await cursor.toArray();
-  if (resources && resources.length) {
-    return {
-      data: resources,
-    };
-  }
-  return {
-    data: [],
-  };
-};
-
-exports.generateReportHtmlToPdf = async (req) => {
-  try {
-    req.log.debug('In generateReportHTML');
-    return {
-      data: { message: 'Pdf generation initiated' },
-    };
-  } catch (e) {
-    req.log.error(e);
-    return {
-      data: {},
-      errros: [{ message: e.message, trace: '' }],
-    };
-  }
 };
